@@ -26,7 +26,7 @@ namespace SchoolDataChartRepresentation
 
             SeriesCollection = new SeriesCollection();
 
-            initializeChart();
+            //initializeChart();
 
         }
 
@@ -56,7 +56,20 @@ namespace SchoolDataChartRepresentation
                 Values = new ChartValues<double>(data3)
             });
         }
+        public void AddNewChart(string name, List<Double> data)
+        {
+            SeriesCollection.Add(new LineSeries
+            {
+                Title = name,
+                Values = new ChartValues<double>(data)
+            });
+        }
 
+        public void RemoveChart(string name)
+        {
+            var seriesToRemove = SeriesCollection.FirstOrDefault(s => s.Title == name);
 
+            if(seriesToRemove != null) SeriesCollection.Remove(seriesToRemove);
+        }
     }
 }
