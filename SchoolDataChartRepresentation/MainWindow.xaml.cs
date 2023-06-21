@@ -46,17 +46,20 @@ namespace SchoolDataChartRepresentation
             data.Add("Lubelskie", new Dictionary<string, List<double>>() {
                 {"Wyniki Matur" , new List<double> { 66.0, 68.2, 74.5 } },
                 {"Ilość dotacji" , new List<double> { 1.72, 2.84, 3.55 } },
-                {"Różnica w zależności od dotacji" , new List<double> { 3.2, -2.1, 1.0 } }
+                {"Różnica w zależności od dotacji" , new List<double> { 3.2, -2.1, 1.0 } },
+                {"2014-2020" , new List<double> { 1.2,2.2,3.2,4.2,5.2,6.2 } }
             });
             data.Add("Mazowieckie", new Dictionary<string, List<double>>() {
                 {"Wyniki Matur" , new List<double> { 44.8, 52.7, 66.4 } },
                 {"Ilość dotacji" , new List<double> { 5.73, 6.29, 10.14 } },
-                {"Różnica w zależności od dotacji" , new List<double> { -1.4, -2.1, 0.9 } }
+                {"Różnica w zależności od dotacji" , new List<double> { -1.4, -2.1, 0.9 } },
+                {"2014-2020" , new List<double> { 1.5,2.5,3.5,4.5,5.5,6.5 } }
             });
             data.Add("Pomorskie", new Dictionary<string, List<double>>() {
                 {"Wyniki Matur" , new List<double> { 72.1, 68.8, 69.4 } },
                 {"Ilość dotacji" , new List<double> { 0.13, 1.04, 1.89 } },
-                {"Różnica w zależności od dotacji" , new List<double> { -1.4, -2.1, -1.8 } }
+                {"Różnica w zależności od dotacji" , new List<double> { -1.4, -2.1, -1.8 } },
+                {"2014-2020" , new List<double> { 1,2,3,4,5,6 } }
             });
             InitializeComponent();
             createCheckboxes(data);
@@ -95,30 +98,69 @@ namespace SchoolDataChartRepresentation
             }
         }
 
+        private void createDataArray()
+        {
+            string[] wojs = {
+                "Dolnośląskie",
+                "Kujawsko-Pomorskie",
+                "Lubelskie",
+                "Lubuskie",
+                "Łódzkie",
+                "Małopolskie",
+                "Mazowieckie",
+                "Opolskie",
+                "Podkarpackie",
+                "Podlaskie",
+                "Pomorskie",
+                "Śląskie",
+                "Świętokrzyskie",
+                "Warmińsko-Mazurskie",
+                "Wielkopolskie",
+                "Zachodnio-Pomorskie"
+            };
+
+            foreach(string woj in wojs)
+            {
+                data.Add(woj, new Dictionary<string, List<double>>());
+            }
+
+        }
+
         private async void RetrieveData(string address)
         {
-            string apiAddress = "https://127.0.0.1:8083" + address;
+            string[] wojs = {
+                "Dolnośląskie",
+                "Kujawsko-Pomorskie",
+                "Lubelskie",
+                "Lubuskie",
+                "Łódzkie",
+                "Małopolskie",
+                "Mazowieckie",
+                "Opolskie",
+                "Podkarpackie",
+                "Podlaskie",
+                "Pomorskie",
+                "Śląskie",
+                "Świętokrzyskie",
+                "Warmińsko-Mazurskie",
+                "Wielkopolskie",
+                "Zachodnio-Pomorskie"
+            };
 
-            RestDataRetriever dataRetriever = new RestDataRetriever();
-            string responseData = await dataRetriever.GetDataFromAddress(apiAddress);
-
-            List<Dictionary<string, object>> rows = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(responseData);
-
-            foreach (Dictionary<string, object> row in rows)
+            foreach (string woj in wojs)
             {
-                string przedmiot = row["przedmiot"].ToString();
-                string poziom = row["poziom"].ToString();
-                string zdajacych = row["zdajacych"].ToString();
-                string minS = row["minS"].ToString();
-                string maxS = row["maxS"].ToString();
-                string mediana = row["mediana"].ToString();
-                string srednia = row["srednia"].ToString();
-                string odchylenie = row["odchylenie"].ToString();
-                string odsetek = row["odsetek"].ToString();
-                string wojewodztwo = row["wojewodztwo"].ToString();
-                int rok = Convert.ToInt32(row["rok"]);
+                string apiAddress = "https://127.0.0.1:8083/wojewodztwoWyniki/zlozony/" + woj + address;
+                RestDataRetriever dataRetriever = new RestDataRetriever();
+                string responseData = await dataRetriever.GetDataFromAddress(apiAddress);
 
-                
+                Dictionary<string, object> row = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseData);
+
+                string wojStr = row[woj].ToString();
+                /*data.Add(row["Województwo"].ToString(), new Dictionary<string, List<double>>()
+                {
+                    {row["srednia_matur"].ToString(), JsonConvert.DeserializeObject<List<double>>(row["srednia_matur"].ToString()) }
+                });*/
+                data[wojStr].Add(row[address].ToString(), JsonConvert.DeserializeObject<List<double>>(row[address].ToString()));
             }
         }
 
@@ -182,7 +224,7 @@ namespace SchoolDataChartRepresentation
             try
             {
                 //string role = await authService.AuthenticateAndGetRole(username, password);
-                //Faking authentication, delete if connected to server
+                //Faking authentication, delete if connected to a server
                 string role = authService.FakeAuthenticateAndGetRole(username, password);
                 switch (role)
                 {

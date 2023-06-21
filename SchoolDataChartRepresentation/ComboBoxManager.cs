@@ -16,7 +16,8 @@ namespace SchoolDataChartRepresentation
             {
                 "Wyniki Matur",
                 "Ilość dotacji",
-                "Różnica w zależności od dotacji"
+                "Różnica w zależności od dotacji",
+                "2014-2020"
             };
 
             SelectedItem = ComboBoxItems.FirstOrDefault();
