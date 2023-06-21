@@ -105,22 +105,22 @@ namespace SchoolDataChartRepresentation
         private void createDataArray()
         {
             string[] wojs = {
-                "dolnoslaskie",
-                "kujawsko-pomorskie"
-                /*"lubelskie",
+                //"dolnoslaskie",
+                //"kujawsko-pomorskie",
+                "lubelskie",
                 "lubuskie",
-                "lodzkie",
-                "malopolskie",
+                //"lodzkie",
+                //"malopolskie",
                 "mazowieckie",
                 "opolskie",
                 "podkarpackie",
-                "podlaskie",
+                //"podlaskie",
                 "pomorskie",
-                "slaskie",
-                "swietokrzyskie",
-                "warminsko-mazurskie",
-                "wielkopolskie",
-                "zachodnio-pomorskie"*/
+                //"slaskie",
+               // "swietokrzyskie",
+                //"warminsko-mazurskie",
+                "wielkopolskie"
+               // "zachodnio-pomorskie"
             };
 
             foreach(string woj in wojs)
