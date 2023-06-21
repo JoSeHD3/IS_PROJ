@@ -11,7 +11,7 @@ namespace SchoolDataChartRepresentation
     {
         private string authenticationEndpoint = "http://127.0.0.1:8083/auth";
 
-        public async Task<string> AuthenticateAndGetRole(string username, string password)
+        public async Task<string> AuthenticateAndGetToken(string username, string password)
         {
             try
             {
@@ -32,13 +32,15 @@ namespace SchoolDataChartRepresentation
                         var responseContent = await response.Content.ReadAsStringAsync();
                         var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseContent);
                         string token = responseObject.token;
-                        string role = responseObject.role;
-                        if (role == "Mod" || role == "Admin") return role;
-                        else throw new Exception("Invalid user role");
+                        return token;
                     }
-                    else throw new Exception("Auth failed");
+                    else
+                    {
+                        throw new Exception("Authentication failed");
+                    }
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
