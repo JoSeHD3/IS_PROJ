@@ -6,7 +6,10 @@
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SchoolDataChartRepresentation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="900">
+    <Window.Resources>
+        <local:ComboBoxManager x:Key="ComboBoxManagerInstance" />
+    </Window.Resources>
     <Grid Background="#FF262626">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
@@ -21,19 +24,39 @@
                 <lvc:Axis Labels="{Binding Labels}"></lvc:Axis>
             </lvc:CartesianChart.AxisX>
         </lvc:CartesianChart>
-        <ComboBox Grid.Column="1" HorizontalAlignment="Center" Margin="0,168,0,0" VerticalAlignment="Top" Width="120" SelectionChanged="ComboBox_SelectionChanged" Grid.Row="1"/>
-        <Label Grid.Column="1" Content="Wybierz porównanie" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFFFFF" Grid.Row="1"/>
-        <ListBox x:Name="CheckboxList" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}">
+        <ComboBox x:Name="cb_Category" Visibility="Hidden" Grid.Column="1" HorizontalAlignment="Center" Margin="0,168,0,0" VerticalAlignment="Top" Width="120" ItemsSource="{Binding ComboBoxItems, Source={StaticResource ComboBoxManagerInstance}}" SelectedValue="{Binding SelectedItem, Source={StaticResource ComboBoxManagerInstance}, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged" Grid.Row="1"/>
+        <Label Grid.Column="1" x:Name="l_Category" Visibility="Hidden" Content="Wybierz porównanie" Margin="0,140,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFFFFF" Grid.Row="1"/>
+        <ListBox x:Name="CheckboxList" Grid.Column="1" d:ItemsSource="{d:SampleData ItemCount=5}" Visibility="Hidden">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox Content="{Binding}" 
                                   Checked="Checkbox_Checked"
-                                  Unchecked="Checkbox_Unchecked">
+                                  Unchecked="Checkbox_Unchecked"
+                                  IsChecked="{Binding IsChecked, Mode=TwoWay}">
                         </CheckBox>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <Grid HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Grid.Column="1" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Username:" Foreground="White" Margin="0,0,5,0"/>
+            <TextBox Grid.Column="1" x:Name="UsernameTextBox" Width="120"/>
+
+            <TextBlock Grid.Row="1" Text="Password:" Foreground="White" Margin="0,5,5,0"/>
+            <PasswordBox Grid.Row="1" Grid.Column="1" x:Name="PasswordBox" Width="120"/>
+
+            <Button Grid.Row="1" Grid.Column="2" Content="Login" Width="80" Click="LoginButton_Click"/>
+        </Grid>
     </Grid>
 </Window>

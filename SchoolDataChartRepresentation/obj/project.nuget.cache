@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "lJ30A7rnqCLNrOQ9OZuSwrj3UYghLV8P7QbDrekeodeY6tvo1tiaLBUBrE0c51BQAMTehzYHXAchUsVOKmI6+g==",
+  "dgSpecHash": "tjp4xkFOdkQUmennXr6HQ7a2CwiEL1D0JVo89NNRlBxGMporXxYeT/kUAjwOhrWcJSAJD62BmH7DtNzjf69HDg==",
   "success": true,
   "projectFilePath": "E:\\repos\\SchoolDataChartRepresentation\\SchoolDataChartRepresentation\\SchoolDataChartRepresentation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sebci\\.nuget\\packages\\livecharts.core\\0.9.8\\livecharts.core.0.9.8.nupkg.sha512",
-    "C:\\Users\\sebci\\.nuget\\packages\\livecharts.wpf.core\\0.9.8\\livecharts.wpf.core.0.9.8.nupkg.sha512"
+    "C:\\Users\\sebci\\.nuget\\packages\\livecharts.wpf.core\\0.9.8\\livecharts.wpf.core.0.9.8.nupkg.sha512",
+    "C:\\Users\\sebci\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
   ],
   "logs": []
 }

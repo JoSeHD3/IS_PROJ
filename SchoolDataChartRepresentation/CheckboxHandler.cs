@@ -13,25 +13,26 @@ namespace SchoolDataChartRepresentation
     {
         private string province;
         private CheckBox checkbox;
-
+        public bool IsChecked { get; set; }
         public CheckBox Checkbox { get => checkbox; set => checkbox = value; }
+        public string Province { get => province; set => province = value; }
 
         public CheckboxHandler(string province)
         {
-            this.province = province;
-
+            this.Province = province;
+            this.IsChecked = false;
             initializeCheckbox();
         }
 
         private void initializeCheckbox()
         {
             Checkbox = new CheckBox();
-            Checkbox.Content = province;
+            Checkbox.Content = Province;
         }
 
         override public string ToString()
         {
-            return province;
+            return Province;
         }
     }
 }
