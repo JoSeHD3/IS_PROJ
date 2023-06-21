@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Newtonsoft.Json;
 using SchoolDataChartRepresentation;
+using System.Threading;
 
 namespace SchoolDataChartRepresentation
 {
@@ -133,6 +134,7 @@ namespace SchoolDataChartRepresentation
                 RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/R/biologia", MaturaResultsData, "Biologia");
                 RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/R/chemia", MaturaResultsData, "Chemia");
                 RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/P/matematyka", DotacjeResultsData);
+                Thread.Sleep(1000);
             }
 
             //RetrieveData("/wojewodztwoWyniki/zlozony/dolnoslaskie/P/matematyka", "dolnoslaskie", "wynikiWKolejnychLatach");
