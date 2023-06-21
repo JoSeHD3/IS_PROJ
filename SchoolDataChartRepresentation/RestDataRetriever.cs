@@ -23,10 +23,16 @@ namespace SchoolDataChartRepresentation
                 HttpResponseMessage response = await httpClient.GetAsync(address);
                 response.EnsureSuccessStatusCode();
 
-                string responseData=await response.Content.ReadAsStringAsync();
+                string responseData = await response.Content.ReadAsStringAsync();
                 return responseData;
-            } catch (HttpRequestException ex) { 
+            }
+            catch (HttpRequestException ex)
+            {
 
+                Console.WriteLine(ex.Message);
+            }
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.Message);
             }
 

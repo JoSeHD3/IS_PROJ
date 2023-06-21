@@ -14,10 +14,10 @@ namespace SchoolDataChartRepresentation
         {
             ComboBoxItems = new List<string>
             {
-                "Wyniki Matur",
-                "Ilość dotacji",
-                "Różnica w zależności od dotacji",
-                "2014-2020"
+                "Wyniki Matur - Matematyka",
+                "Wyniki Matur - Biologia",
+                "Wyniki Matur - Chemia",
+                "Wielkosc Dotacji"
             };
 
             SelectedItem = ComboBoxItems.FirstOrDefault();

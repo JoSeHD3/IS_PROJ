@@ -25,13 +25,13 @@ namespace SchoolDataChartRepresentation
 
         public List<string> Labels { get => labels; set => labels = value; }
 
-        private void initializeChart()
+        public void initializeChart()
         {
             SeriesCollection.Clear();
-            Labels.Clear();
+            //Labels.Clear();
 
         }
-        public void AddNewChart(string name, List<Double> data)
+        public void AddNewChart(string name, List<double> data)
         {
             SeriesCollection.Add(new LineSeries
             {

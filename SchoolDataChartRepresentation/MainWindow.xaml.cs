@@ -43,7 +43,7 @@ namespace SchoolDataChartRepresentation
 
             checkboxHandlers = new List<CheckboxHandler>();
             data = new Dictionary<string, Dictionary<string, List<double>>>();
-            data.Add("Lubelskie", new Dictionary<string, List<double>>() {
+            /*data.Add("Lubelskie", new Dictionary<string, List<double>>() {
                 {"Wyniki Matur" , new List<double> { 66.0, 68.2, 74.5 } },
                 {"Ilość dotacji" , new List<double> { 1.72, 2.84, 3.55 } },
                 {"Różnica w zależności od dotacji" , new List<double> { 3.2, -2.1, 1.0 } },
@@ -60,12 +60,15 @@ namespace SchoolDataChartRepresentation
                 {"Ilość dotacji" , new List<double> { 0.13, 1.04, 1.89 } },
                 {"Różnica w zależności od dotacji" , new List<double> { -1.4, -2.1, -1.8 } },
                 {"2014-2020" , new List<double> { 1,2,3,4,5,6 } }
-            });
+            });*/
             InitializeComponent();
+            createDataArray();
             createCheckboxes(data);
             initializer = new InitializeChart();
+            initializer.initializeChart();
             SeriesCollection = initializer.SeriesCollection;
             Labels = initializer.Labels;
+            //yAxis.Labels = new[] { "2014", "2015", "2016", "2017", "2018", "2019", "2020" };
             DataContext = this;
         }
 
@@ -101,67 +104,77 @@ namespace SchoolDataChartRepresentation
         private void createDataArray()
         {
             string[] wojs = {
-                "Dolnośląskie",
-                "Kujawsko-Pomorskie",
-                "Lubelskie",
-                "Lubuskie",
-                "Łódzkie",
-                "Małopolskie",
-                "Mazowieckie",
-                "Opolskie",
-                "Podkarpackie",
-                "Podlaskie",
-                "Pomorskie",
-                "Śląskie",
-                "Świętokrzyskie",
-                "Warmińsko-Mazurskie",
-                "Wielkopolskie",
-                "Zachodnio-Pomorskie"
+                "dolnoslaskie",
+                "kujawsko-pomorskie"
+                /*"lubelskie",
+                "lubuskie",
+                "lodzkie",
+                "malopolskie",
+                "mazowieckie",
+                "opolskie",
+                "podkarpackie",
+                "podlaskie",
+                "pomorskie",
+                "slaskie",
+                "swietokrzyskie",
+                "warminsko-mazurskie",
+                "wielkopolskie",
+                "zachodnio-pomorskie"*/
             };
 
             foreach(string woj in wojs)
             {
                 data.Add(woj, new Dictionary<string, List<double>>());
+                data[woj].Add("Wyniki Matur - Matematyka", new List<double>());
+                data[woj].Add("Wyniki Matur - Biologia", new List<double>());
+                data[woj].Add("Wyniki Matur - Chemia", new List<double>());
+                data[woj].Add("Wielkosc Dotacji", new List<double>());
+                RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/P/matematyka", MaturaResultsData, "Matematyka");
+                RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/R/biologia", MaturaResultsData, "Biologia");
+                RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/R/chemia", MaturaResultsData, "Chemia");
+                RetrieveData($"/wojewodztwoWyniki/zlozony/{woj}/P/matematyka", DotacjeResultsData);
             }
+
+            //RetrieveData("/wojewodztwoWyniki/zlozony/dolnoslaskie/P/matematyka", "dolnoslaskie", "wynikiWKolejnychLatach");
 
         }
 
-        private async void RetrieveData(string address)
+        private async void RetrieveData(string address, Action<string> method)
         {
-            string[] wojs = {
-                "Dolnośląskie",
-                "Kujawsko-Pomorskie",
-                "Lubelskie",
-                "Lubuskie",
-                "Łódzkie",
-                "Małopolskie",
-                "Mazowieckie",
-                "Opolskie",
-                "Podkarpackie",
-                "Podlaskie",
-                "Pomorskie",
-                "Śląskie",
-                "Świętokrzyskie",
-                "Warmińsko-Mazurskie",
-                "Wielkopolskie",
-                "Zachodnio-Pomorskie"
-            };
 
-            foreach (string woj in wojs)
-            {
-                string apiAddress = "https://127.0.0.1:8083/wojewodztwoWyniki/zlozony/" + woj + address;
-                RestDataRetriever dataRetriever = new RestDataRetriever();
-                string responseData = await dataRetriever.GetDataFromAddress(apiAddress);
+            string apiAddress = "http://127.0.0.1:8083" + address;
+            RestDataRetriever dataRetriever = new RestDataRetriever();
+            string responseData = await dataRetriever.GetDataFromAddress(apiAddress);
 
-                Dictionary<string, object> row = JsonConvert.DeserializeObject<Dictionary<string, object>>(responseData);
+            if (responseData != null)
+                method.Invoke(responseData);
+        }
 
-                string wojStr = row[woj].ToString();
-                /*data.Add(row["Województwo"].ToString(), new Dictionary<string, List<double>>()
-                {
-                    {row["srednia_matur"].ToString(), JsonConvert.DeserializeObject<List<double>>(row["srednia_matur"].ToString()) }
-                });*/
-                data[wojStr].Add(row[address].ToString(), JsonConvert.DeserializeObject<List<double>>(row[address].ToString()));
-            }
+        private async void RetrieveData(string address, Action<string, string> method, string subject)
+        {
+
+            string apiAddress = "http://127.0.0.1:8083" + address;
+            RestDataRetriever dataRetriever = new RestDataRetriever();
+            string responseData = await dataRetriever.GetDataFromAddress(apiAddress);
+
+            if (responseData != null)
+                method.Invoke(responseData, subject);
+        }
+
+        private void MaturaResultsData(string responseData, string subject)
+        {
+            ResultsModel model = JsonConvert.DeserializeObject<ResultsModel>(responseData);
+
+            string wojStr = model.Nazwa;
+            data[wojStr]["Wyniki Matur - " + subject] = model.WynikiWKolejnychLatach;
+            /*consoleOutput.Text = $"Values: {string.Join(", ", model.WynikiWKolejnychLatach.ToList())}";
+            consoleOutput.UpdateLayout();*/
+        }
+
+        private void DotacjeResultsData(string responseData)
+        {
+            ResultsModel model = JsonConvert.DeserializeObject<ResultsModel>(responseData);
+            string wojStr = model.Nazwa; data[wojStr]["Wielkosc Dotacji"] = model.DotacjeWKolejnychLatach;
         }
 
         private Dictionary<string, object> ParseJsonData(string jsonData)
@@ -202,6 +215,7 @@ namespace SchoolDataChartRepresentation
         {
             CheckBox checkBox = (CheckBox)sender;
             string name = checkBox.Content.ToString();
+            
             checkBox.IsChecked = true;
             initializer.AddNewChart(name, data[name][comboBoxSelectedItem]);
         }
